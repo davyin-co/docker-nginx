@@ -7,4 +7,5 @@ ENV CONTAINER_ENABLE_MONITORING=FALSE
 ## MQQBrowser是QQ浏览器，默认支持。因为微信中打开链接就是这个。
 RUN \
     sed -i '/MQQBrowser/d' /etc/nginx/snippets/blockbots/globalblacklist.conf && \
-    sed -i '/MicroMessenge/d' /etc/nginx/snippets/blockbots/globalblacklist.conf 
+    sed -i '/MicroMessenge/d' /etc/nginx/snippets/blockbots/globalblacklist.conf && \
+    sed -i '/Baidu/d' /etc/nginx/snippets/blockbots/globalblacklist.conf 
