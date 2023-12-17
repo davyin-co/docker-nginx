@@ -38,3 +38,13 @@ jobs:
         platforms: linux/amd64,linux/arm64
         file: Dockerfile
         tags: davyinsa/nginx
+    -
+      name: Build and push
+      id: docker_build_subpath
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        context: .
+        platforms: linux/amd64,linux/arm64
+        file: Dockerfile-subpath
+        tags: davyinsa/nginx:subpath
