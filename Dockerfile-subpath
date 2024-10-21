@@ -1,5 +1,5 @@
 FROM nginx
-RUN  apt update && apt intall -y vim
+RUN  apt update && apt install -y vim
 RUN { \
       echo 'server_tokens off;'; \
       echo 'client_max_body_size 100m;'; \
