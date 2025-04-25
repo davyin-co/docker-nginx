@@ -13,7 +13,7 @@ RUN \
     sed -i '/MQQBrowser/d' /etc/nginx/snippets/blockbots/globalblacklist.conf && \
     sed -i '/MicroMessenge/d' /etc/nginx/snippets/blockbots/globalblacklist.conf && \
     sed -i '/Baidu/d' /etc/nginx/snippets/blockbots/globalblacklist.conf
-RUN apk add --no-cache vim findutils shadow coreutils rsync lsyncd netcat-openbsd openssh-client openssh-server openssh-server-pam open-sftp-server && \
+RUN apk add --no-cache vim findutils shadow coreutils rsync lsyncd netcat-openbsd openssh-client openssh-server openssh-server-pam openssh-sftp-server && \
     echo "**** setup openssh environment ****" && \
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
     echo "**** create abc user and make our folders ****" && \
