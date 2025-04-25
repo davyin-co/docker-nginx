@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <title>网站维护中 | Site Maintenance</title>
+    <style type="text/css">
+        body { 
+            text-align: center; 
+            padding: 150px; 
+            font: 20px Helvetica, sans-serif; 
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        h1 { 
+            font-size: 50px; 
+            margin-bottom: 30px;
+        }
+        #article { 
+            display: block; 
+            text-align: left; 
+            width: 650px; 
+            margin: 0 auto; 
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        a { 
+            color: #dc8100; 
+            text-decoration: none; 
+        }
+        a:hover { 
+            color: #333; 
+            text-decoration: none; 
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="article">
+        <div class="language-toggle">
+            <a href="#" onclick="toggleLanguage('en')">English</a> | 
+            <a href="#" onclick="toggleLanguage('zh')">中文</a>
+        </div>
+        
+        <div id="en-content">
+            <h1>We'll be back soon!</h1>
+            <div>
+                <p>Sorry for the inconvenience but we're performing some maintenance at the moment. We'll be back online shortly!</p>
+                <p>If you need immediate assistance, please contact our support team.</p>
+                <p>&mdash; The Team</p>
+            </div>
+        </div>
+        
+        <div id="zh-content" class="hidden">
+            <h1>网站维护中</h1>
+            <div>
+                <p>很抱歉给您带来不便，我们正在进行系统维护，很快将会恢复正常访问！</p>
+                <p>如果您需要紧急帮助，请联系我们的客服团队。</p>
+                <p>&mdash; 团队敬上</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function toggleLanguage(lang) {
+            if (lang === 'zh') {
+                document.getElementById('zh-content').classList.remove('hidden');
+                document.getElementById('en-content').classList.add('hidden');
+            } else {
+                document.getElementById('en-content').classList.remove('hidden');
+                document.getElementById('zh-content').classList.add('hidden');
+            }
+            return false;
+        }
+        
+        // 默认显示英文
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleLanguage('en');
+        });
+    </script>
+</body>
+</html>

@@ -13,6 +13,7 @@ ENV TZ=Asia/Shanghai
 ENV PASSWORD_ACCESS=true
 ENV SUDO_ACCESS=true
 ## MQQBrowser是QQ浏览器，默认支持。因为微信中打开链接就是这个。
+ADD install /
 RUN \
     sed -i '/MQQBrowser/d' /etc/nginx/snippets/blockbots/globalblacklist.conf && \
     sed -i '/MicroMessenge/d' /etc/nginx/snippets/blockbots/globalblacklist.conf && \
