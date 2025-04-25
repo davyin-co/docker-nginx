@@ -8,6 +8,10 @@ ENV LOGROTATE_RETAIN_DAYS=60
 ENV NGINX_SITE_ENABLED=null
 ENV LSIOWN_VERSION="v1"
 ENV S6_STAGE2_HOOK=/docker-mods
+## linuxserver openssh-server default value
+ENV TZ=Asia/Shanghai
+ENV PASSWORD_ACCESS=true
+ENV SUDO_ACCESS=true
 ## MQQBrowser是QQ浏览器，默认支持。因为微信中打开链接就是这个。
 RUN \
     sed -i '/MQQBrowser/d' /etc/nginx/snippets/blockbots/globalblacklist.conf && \
