@@ -4,22 +4,22 @@
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
     <title>网站维护中 | Site Maintenance</title>
     <style type="text/css">
-        body { 
-            text-align: center; 
-            padding: 150px; 
-            font: 20px Helvetica, sans-serif; 
+        body {
+            text-align: center;
+            padding: 150px;
+            font: 20px Helvetica, sans-serif;
             color: #333;
             background-color: #f9f9f9;
         }
-        h1 { 
-            font-size: 50px; 
+        h1 {
+            font-size: 50px;
             margin-bottom: 30px;
         }
-        #article { 
-            display: block; 
-            text-align: left; 
-            width: 650px; 
-            margin: 0 auto; 
+        #article {
+            display: block;
+            text-align: left;
+            width: 650px;
+            margin: 0 auto;
             padding: 30px;
             background: white;
             border-radius: 8px;
@@ -29,13 +29,13 @@
             text-align: right;
             margin-bottom: 20px;
         }
-        a { 
-            color: #dc8100; 
-            text-decoration: none; 
+        a {
+            color: #dc8100;
+            text-decoration: none;
         }
-        a:hover { 
-            color: #333; 
-            text-decoration: none; 
+        a:hover {
+            color: #333;
+            text-decoration: none;
         }
         .hidden {
             display: none;
@@ -45,19 +45,9 @@
 <body>
     <div id="article">
         <div class="language-toggle">
-            <a href="#" onclick="toggleLanguage('en')">English</a> | 
-            <a href="#" onclick="toggleLanguage('zh')">中文</a>
+            <a href="#" onclick="toggleLanguage('zh')">中文</a> |
+            <a href="#" onclick="toggleLanguage('en')">English</a>
         </div>
-        
-        <div id="en-content">
-            <h1>We'll be back soon!</h1>
-            <div>
-                <p>Sorry for the inconvenience but we're performing some maintenance at the moment. We'll be back online shortly!</p>
-                <p>If you need immediate assistance, please contact our support team.</p>
-                <p>&mdash; The Team</p>
-            </div>
-        </div>
-        
         <div id="zh-content" class="hidden">
             <h1>网站维护中</h1>
             <div>
@@ -66,6 +56,16 @@
                 <p>&mdash; 团队敬上</p>
             </div>
         </div>
+
+        <div id="en-content">
+            <h1>We'll be back soon!</h1>
+            <div>
+                <p>Sorry for the inconvenience but we're performing some maintenance at the moment. We'll be back online shortly!</p>
+                <p>If you need immediate assistance, please contact our support team.</p>
+                <p>&mdash; The Team</p>
+            </div>
+        </div>
+
     </div>
 
     <script type="text/javascript">
@@ -79,10 +79,10 @@
             }
             return false;
         }
-        
+
         // 默认显示英文
         document.addEventListener('DOMContentLoaded', function() {
-            toggleLanguage('en');
+            toggleLanguage('zh');
         });
     </script>
 </body>
