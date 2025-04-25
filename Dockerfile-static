@@ -1,0 +1,33 @@
+FROM tiredofit/nginx:alpine
+ENV CONTAINER_NAME=nginx
+ENV CONTAINER_LOG_LEVEL=DEBUG
+ENV NGINX_ENABLE_BLOCK_BOTS=TRUE
+ENV NGINX_ENABLE_OPEN_FILE_CACHE=TRUE
+ENV CONTAINER_ENABLE_MONITORING=FALSE
+ENV LOGROTATE_RETAIN_DAYS=60
+ENV NGINX_SITE_ENABLED=null
+ENV LSIOWN_VERSION="v1"
+ENV S6_STAGE2_HOOK=/docker-mods
+## MQQBrowser是QQ浏览器，默认支持。因为微信中打开链接就是这个。
+RUN \
+    sed -i '/MQQBrowser/d' /etc/nginx/snippets/blockbots/globalblacklist.conf && \
+    sed -i '/MicroMessenge/d' /etc/nginx/snippets/blockbots/globalblacklist.conf && \
+    sed -i '/Baidu/d' /etc/nginx/snippets/blockbots/globalblacklist.conf
+RUN apk add --no-cache vim findutils shadow coreutils rsync lsyncd netcat-openbsd openssh-client openssh-server openssh-server-pam open-sftp-server && \
+    echo "**** setup openssh environment ****" && \
+    sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
+    echo "**** create abc user and make our folders ****" && \
+    groupmod -g 1000 users && \
+    useradd -u 911 -U -d /var/www/html -s /bin/sh abc && \
+    usermod -G www-data abc && \
+    mkdir -p /app /config /defaults /lsiopy && \
+    echo "**** cleanup ****" && \
+    rm -rf /tmp/* $HOME/.cache && \
+    echo "**** add lsyncd user ****" && \
+    useradd -u 666 -U -d /config -s /bin/bash lsyncd && \
+    usermod -G www-data lsyncd
+
+COPY --from=ghcr.io/linuxserver/openssh-server /etc/s6-overlay/s6-rc.d /etc/s6-overlay/s6-rc.d
+COPY --from=ghcr.io/linuxserver/openssh-server /docker-mods /docker-mods
+## https://github.com/linuxserver/docker-baseimage-alpine/blob/master/Dockerfile#L59
+ADD --chmod=744 "https://raw.githubusercontent.com/linuxserver/docker-mods/mod-scripts/lsiown.${LSIOWN_VERSION}" "/usr/bin/lsiown"

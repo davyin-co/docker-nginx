@@ -1,4 +1,4 @@
-FROM nginx
+FROM nginx:stable-bookworm
 RUN  apt update && apt install -y vim
 RUN { \
       echo 'server_tokens off;'; \
@@ -6,4 +6,5 @@ RUN { \
     } > /etc/nginx/conf.d/server-token-off.conf
 ADD nginx.conf /etc/nginx/
 ADD subpath.sh /docker-entrypoint.d/
+RUN chmod +x /docker-entrypoint.d/subpath.sh
 ADD default.conf /etc/nginx/conf.d/
