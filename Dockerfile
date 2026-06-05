@@ -1,4 +1,4 @@
-FROM tiredofit/nginx:alpine
+FROM nfrastack/nginx:alpine
 ENV CONTAINER_NAME=nginx
 ENV CONTAINER_LOG_LEVEL=DEBUG
 ENV NGINX_ENABLE_BLOCK_BOTS=TRUE
