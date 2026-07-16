@@ -5,10 +5,35 @@ ENV NGINX_ENABLE_BLOCK_BOTS=TRUE
 ENV NGINX_ENABLE_OPEN_FILE_CACHE=FALSE
 ENV CONTAINER_ENABLE_MONITORING=FALSE
 ENV LOGROTATE_RETAIN_DAYS=60
+## 文件里对这类"高级" ENV 设有 ATTENTION nag + 随机 sleep（实测 3–16 秒）。
+## 若需自定义轮转天数，请挂载覆盖 /etc/logrotate.conf（基础镜像默认 3 天）。
 ENV NGINX_SITE_ENABLED=null
 ## MQQBrowser是QQ浏览器，默认支持。因为微信中打开链接就是这个。
 ## nfrastack/nginx 自 8.x 起, blockbots 配置已从 /etc/nginx/snippets/blockbots/ 迁至 /container/data/nginx/blockbots/
 RUN \
     sed -i '/MQQBrowser/d' /container/data/nginx/blockbots/globalblacklist.conf && \
     sed -i '/MicroMessenge/d' /container/data/nginx/blockbots/globalblacklist.conf && \
-    sed -i '/Baidu/d' /container/data/nginx/blockbots/globalblacklist.conf 
+    sed -i '/Baidu/d' /container/data/nginx/blockbots/globalblacklist.conf
+# 注入 init.d 脚本，在上游 d_e_o() 检查之前创建 .advanced 标记，
+# 消除 nfrastack 的 rANDOM % 23 秒 ATTENTION nag sleep（实测 0~22 秒）。
+RUN \
+    mkdir -p /container/init/init.d && \
+    cat > /container/init/init.d/00-disable-nag << 'SCRIPT' && \
+    chmod +x /container/init/init.d/00-disable-nag
+#!/command/with-contenv bash
+source /container/base/functions/container/init
+prepare_service single
+mkdir -p /container/state/init && touch /container/state/init/.advanced
+liftoff
+SCRIPT
+# 消除 s6-overlay legacy services-up 中的 race-condition sleep。
+# S6_CMD_WAIT_FOR_SERVICES=0 在运行时短路整段 sleep 块；
+# S6_SERVICES_READYTIME=0 是回退保险；sed 兜底让源码层也无 sleep。
+ENV S6_CMD_WAIT_FOR_SERVICES=0 \
+    S6_SERVICES_READYTIME=0
+RUN \
+    SERVICES_UP=$(find /package/admin/s6-overlay-*/etc/s6-rc/scripts/services-up 2>/dev/null | head -1) && \
+    if [ -n "$SERVICES_UP" ] && [ -f "$SERVICES_UP" ]; then \
+        sed -i 's/^[[:space:]]*rtime=50[[:space:]]*$/rtime=0/' "$SERVICES_UP" && \
+        sed -i 's|^[[:space:]]*s6-sleep -m "\$rtime"|: # patched: no-op|' "$SERVICES_UP"; \
+    fi 

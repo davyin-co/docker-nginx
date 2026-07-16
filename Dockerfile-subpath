@@ -8,3 +8,14 @@ ADD nginx.conf /etc/nginx/
 ADD subpath.sh /docker-entrypoint.d/
 RUN chmod +x /docker-entrypoint.d/subpath.sh
 ADD default.conf /etc/nginx/conf.d/
+# 消除 s6-overlay legacy services-up 中的 race-condition sleep。
+# Dockerfile-subpath 当前基镜像为 nginx:stable-bookworm 不含 s6-overlay，
+# 因此以下两段为防御性 no-op（find 找不到文件时静默跳过）。
+ENV S6_CMD_WAIT_FOR_SERVICES=0 \
+    S6_SERVICES_READYTIME=0
+RUN \
+    SERVICES_UP=$(find /package/admin/s6-overlay-*/etc/s6-rc/scripts/services-up 2>/dev/null | head -1) && \
+    if [ -n "$SERVICES_UP" ] && [ -f "$SERVICES_UP" ]; then \
+        sed -i 's/^[[:space:]]*rtime=50[[:space:]]*$/rtime=0/' "$SERVICES_UP" && \
+        sed -i 's|^[[:space:]]*s6-sleep -m "\$rtime"|: # patched: no-op|' "$SERVICES_UP"; \
+    fi
