@@ -29,6 +29,8 @@ jobs:
       id: docker_build
       uses: docker/build-push-action@v6
       with:
+        provenance: false
+        sbom: false
         push: true
         context: .
         platforms: linux/amd64,linux/arm64
@@ -38,6 +40,8 @@ jobs:
       id: docker_build_subpath
       uses: docker/build-push-action@v6
       with:
+        provenance: false
+        sbom: false
         push: true
         context: .
         platforms: linux/amd64,linux/arm64
@@ -47,6 +51,8 @@ jobs:
       id: docker_build_static
       uses: docker/build-push-action@v6
       with:
+        provenance: false
+        sbom: false
         push: true
         context: .
         platforms: linux/amd64,linux/arm64
@@ -62,6 +68,8 @@ jobs:
       id: docker_build_aliyun
       uses: docker/build-push-action@v6
       with:
+        provenance: false
+        sbom: false
         push: true
         context: .
         platforms: linux/amd64,linux/arm64
@@ -71,6 +79,8 @@ jobs:
       id: docker_build_aliyun_subpath
       uses: docker/build-push-action@v6
       with:
+        provenance: false
+        sbom: false
         push: true
         context: .
         platforms: linux/amd64,linux/arm64
@@ -80,6 +90,8 @@ jobs:
       id: docker_build_aliyun_static
       uses: docker/build-push-action@v6
       with:
+        provenance: false
+        sbom: false
         push: true
         context: .
         platforms: linux/amd64,linux/arm64
