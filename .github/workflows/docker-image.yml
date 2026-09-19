@@ -35,29 +35,10 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         file: Dockerfile
-        tags: davyinsa/nginx
-    - name: Build and push subpath
-      id: docker_build_subpath
-      uses: docker/build-push-action@v6
-      with:
-        provenance: false
-        sbom: false
-        push: true
-        context: .
-        platforms: linux/amd64,linux/arm64
-        file: Dockerfile-subpath
-        tags: davyinsa/nginx:subpath
-    - name: Build and push Static
-      id: docker_build_static
-      uses: docker/build-push-action@v6
-      with:
-        provenance: false
-        sbom: false
-        push: true
-        context: .
-        platforms: linux/amd64,linux/arm64
-        file: Dockerfile-static
-        tags: davyinsa/nginx:static
+        # subpath 已合并进主镜像（SUBDIR 环境变量控制），同一镜像多 tag
+        tags: |
+          davyinsa/nginx:latest
+          davyinsa/nginx:subpath
     - name: Login to ALIYUN CR
       uses: docker/login-action@v3
       with:
@@ -74,26 +55,6 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         file: Dockerfile
-        tags: registry.cn-hangzhou.aliyuncs.com/davyin/nginx
-    - name: Build and push
-      id: docker_build_aliyun_subpath
-      uses: docker/build-push-action@v6
-      with:
-        provenance: false
-        sbom: false
-        push: true
-        context: .
-        platforms: linux/amd64,linux/arm64
-        file: Dockerfile-subpath
-        tags: registry.cn-hangzhou.aliyuncs.com/davyin/nginx:subpath
-    - name: Build and push static
-      id: docker_build_aliyun_static
-      uses: docker/build-push-action@v6
-      with:
-        provenance: false
-        sbom: false
-        push: true
-        context: .
-        platforms: linux/amd64,linux/arm64
-        file: Dockerfile-static
-        tags: registry.cn-hangzhou.aliyuncs.com/davyin/nginx:static
+        tags: |
+          registry.cn-hangzhou.aliyuncs.com/davyin/nginx:latest
+          registry.cn-hangzhou.aliyuncs.com/davyin/nginx:subpath

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ ! -z "$SUBDIR" ]; then
   DRUPAL_SUBDIR=${SUBDIR:=fake-subdir-placeholder}
