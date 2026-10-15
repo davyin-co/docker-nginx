@@ -10,7 +10,8 @@
 4. 内置调试工具：`bash`、`vim`、`curl`、`telnet`
 5. 访问/错误日志输出到 stdout/stderr（用 `docker logs` 查看）
 6. 自定义维护页面内置（见下文）
-7. 同时兼容 `/etc/nginx/conf.d` 与 `/etc/nginx/sites.enabled` 两种配置挂载方式
+7. 环境变量一键反向代理（`NGINX_MODE=proxy`，见下文）
+8. 同时兼容 `/etc/nginx/conf.d` 与 `/etc/nginx/sites.enabled` 两种配置挂载方式
 
 ## 镜像 tag
 
@@ -58,6 +59,31 @@ services:
 ```
 
 注意：subpath 模式不要挂载覆盖 `/etc/nginx/conf.d/default.conf`。
+
+### 方式四：环境变量反向代理
+
+无需挂载任何配置，通过环境变量一键开启反向代理：
+
+```yaml
+services:
+  nginx:
+    image: davyinsa/nginx:latest
+    ports:
+      - "80:80"
+    environment:
+      NGINX_MODE: proxy                                # 或 NGINX_ENABLE_REVERSE_PROXY: "TRUE"
+      NGINX_PROXY_URL: http://192.168.168.100:8080     # 必填，proxy_pass 目标
+      NGINX_SERVER_NAME: app.example.com                  # 可选，默认 _（捕获全部 Host）
+```
+
+启动时 entrypoint 会生成 `/etc/nginx/sites.enabled/reverse-proxy.conf`，
+透传 `Host`、`X-Real-IP`、`X-Forwarded-For/Proto` 等标准头，并支持 WebSocket 升级。
+
+注意：
+- 未设置 `NGINX_SERVER_NAME`（即 `_`）时该站点为默认 server，所有请求都会被代理
+- 设置了 `NGINX_SERVER_NAME` 时，其他 Host 仍由 `default.conf` 的欢迎页兜底
+- 开启代理但未设置 `NGINX_PROXY_URL` 时容器启动报错退出
+- 生成的是运行期文件，容器重启后按当前环境变量重新生成；如需固定配置请改用方式一/二挂载
 
 ### 维护页面
 

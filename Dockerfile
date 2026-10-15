@@ -14,6 +14,12 @@ RUN mkdir -p /etc/nginx/sites.enabled
 ADD subpath.sh /docker-entrypoint.d/subpath.sh
 RUN chmod +x /docker-entrypoint.d/subpath.sh
 
+## 反向代理支持：NGINX_MODE=proxy 或 NGINX_ENABLE_REVERSE_PROXY=TRUE 时，
+## entrypoint 按 NGINX_PROXY_URL / NGINX_SERVER_NAME 生成 proxy vhost；
+## 不设置则为 no-op。
+ADD reverse-proxy.sh /docker-entrypoint.d/reverse-proxy.sh
+RUN chmod +x /docker-entrypoint.d/reverse-proxy.sh
+
 ## 默认站点（subpath 场景）+ 默认安全/上传限制
 ADD default.conf /etc/nginx/conf.d/default.conf
 RUN { \
